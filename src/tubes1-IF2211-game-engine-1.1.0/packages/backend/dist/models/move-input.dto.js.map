@@ -1,0 +1,1 @@
+{"version":3,"file":"move-input.dto.js","sourceRoot":"","sources":["../../src/models/move-input.dto.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,6CAA8C;AAC9C,qDAAyC;AACzC,oCAAyC;AAEzC,MAAa,YAAY;IAMvB,SAAS,CAAiB;CAC3B;AANC;IAAC,IAAA,qBAAW,EAAC;QACX,WAAW,EAAE,6CAA6C;QAC1D,IAAI,EAAE,qBAAa;KACpB,CAAC;IACD,IAAA,wBAAM,EAAC,qBAAa,CAAC;;+CACI;AAN5B,oCAOC"}

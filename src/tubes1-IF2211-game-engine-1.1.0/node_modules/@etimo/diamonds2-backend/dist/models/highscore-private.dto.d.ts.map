@@ -1,0 +1,1 @@
+{"version":3,"file":"highscore-private.dto.d.ts","sourceRoot":"","sources":["../../src/models/highscore-private.dto.ts"],"names":[],"mappings":"AAAA,qBAAa,mBAAmB;IAC9B,OAAO,EAAG,MAAM,CAAC;IACjB,KAAK,EAAG,MAAM,CAAC;IACf,KAAK,EAAG,MAAM,CAAC;WAED,IAAI,CAAC,GAAG,EAAE,mBAAmB;WAQ7B,iBAAiB,CAAC,IAAI,EAAE,EAAE;CAYzC"}

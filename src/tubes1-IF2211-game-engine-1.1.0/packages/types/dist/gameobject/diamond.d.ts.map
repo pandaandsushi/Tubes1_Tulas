@@ -1,0 +1,1 @@
+{"version":3,"file":"diamond.d.ts","sourceRoot":"","sources":["../../src/gameobject/diamond.ts"],"names":[],"mappings":"AAAA,MAAM,MAAM,2BAA2B,GAAG;IACxC,MAAM,EAAE,MAAM,CAAC;CAChB,CAAC;AAEF,MAAM,MAAM,qBAAqB,GAAG;IAClC;;OAEG;IACH,qBAAqB,EAAE,MAAM,CAAC;IAC9B;;OAEG;IACH,eAAe,EAAE,MAAM,CAAC;IACxB;;OAEG;IACH,QAAQ,EAAE,MAAM,CAAC;CAClB,CAAC"}

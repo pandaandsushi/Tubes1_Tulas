@@ -1,0 +1,1 @@
+{"version":3,"file":"Cell.d.ts","sourceRoot":"","sources":["../../../src/components/Board/Cell.tsx"],"names":[],"mappings":"AAAA,OAAO,EAAE,cAAc,EAAE,MAAM,wBAAwB,CAAC;AACxD,OAAO,EAAE,EAAE,EAAQ,MAAM,OAAO,CAAC;AASjC,KAAK,SAAS,GAAG;IACf,WAAW,EAAE,cAAc,EAAE,CAAC;IAC9B,EAAE,EAAE,MAAM,CAAC;CACZ,CAAC;AAoBF,eAAO,MAAM,IAAI,EAAE,EAAE,CAAC,SAAS,CAuB7B,CAAC"}

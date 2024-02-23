@@ -1,0 +1,1 @@
+{"version":3,"file":"board-metadata.dto.d.ts","sourceRoot":"","sources":["../../src/models/board-metadata.dto.ts"],"names":[],"mappings":"AACA,OAAO,eAAe,MAAM,qBAAqB,CAAC;AAElD,qBAAa,gBAAgB;IAK3B,EAAE,EAAG,MAAM,CAAC;IAIZ,KAAK,EAAG,MAAM,CAAC;IAIf,MAAM,EAAG,MAAM,CAAC;IAKhB,wBAAwB,EAAG,MAAM,CAAC;IAOlC,QAAQ,EAAG,eAAe,EAAE,CAAC;CAC9B"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"dummy-bot.d.ts","sourceRoot":"","sources":["../../../../src/gameengine/gameobjects/dummy-bot/dummy-bot.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,KAAK,EAAE,MAAM,aAAa,CAAC;AACpC,OAAO,EAAE,aAAa,EAAE,MAAM,YAAY,CAAC;AAE3C,qBAAa,kBAAmB,SAAQ,aAAa;IACnD,4BAA4B,CAAC,KAAK,EAAE,KAAK,EAAE,UAAU,EAAE,MAAM;IAkC7D,OAAO,CAAC,uBAAuB;CAiBhC"}

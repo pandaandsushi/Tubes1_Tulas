@@ -1,0 +1,1 @@
+{"version":3,"file":"teleport.d.ts","sourceRoot":"","sources":["../../src/gameobject/teleport.ts"],"names":[],"mappings":"AAAA,MAAM,MAAM,kBAAkB,GAAG;IAC/B,MAAM,EAAE,MAAM,CAAC;CAChB,CAAC;AAEF,MAAM,MAAM,sBAAsB,GAAG;IACnC;;OAEG;IACH,KAAK,EAAE,MAAM,CAAC;CACf,CAAC;AAEF,MAAM,MAAM,gCAAgC,GAAG;IAC7C;;OAEG;IACH,OAAO,EAAE,MAAM,CAAC;CACjB,CAAC"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"PlayerTable.d.ts","sourceRoot":"","sources":["../../src/components/PlayerTable.tsx"],"names":[],"mappings":"AAAA,OAAO,EAAE,uBAAuB,EAAE,MAAM,wBAAwB,CAAC;AACjE,OAAO,EAAE,EAAE,EAAQ,MAAM,OAAO,CAAC;AAIjC,KAAK,gBAAgB,GAAG;IACtB,IAAI,EAAE,uBAAuB,EAAE,CAAC;IAChC,OAAO,EAAE,MAAM,CAAC;CACjB,CAAC;AAEF,eAAO,MAAM,WAAW,EAAE,EAAE,CAAC,gBAAgB,CA0B3C,CAAC"}

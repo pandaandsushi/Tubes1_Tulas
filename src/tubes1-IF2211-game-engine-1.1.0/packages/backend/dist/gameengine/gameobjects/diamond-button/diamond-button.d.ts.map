@@ -1,0 +1,1 @@
+{"version":3,"file":"diamond-button.d.ts","sourceRoot":"","sources":["../../../../src/gameengine/gameobjects/diamond-button/diamond-button.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,kBAAkB,EAAE,MAAM,yBAAyB,CAAC;AAC7D,OAAO,EAAE,KAAK,EAAE,MAAM,aAAa,CAAC;AAIpC,qBAAa,uBAAwB,SAAQ,kBAAkB;IAC7D;;OAEG;IACH,mBAAmB,CAAC,UAAU,EAAE,kBAAkB,EAAE,KAAK,EAAE,KAAK;CAOjE"}

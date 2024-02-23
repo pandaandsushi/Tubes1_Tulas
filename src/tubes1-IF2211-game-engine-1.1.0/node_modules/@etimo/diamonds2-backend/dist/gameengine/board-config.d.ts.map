@@ -1,0 +1,1 @@
+{"version":3,"file":"board-config.d.ts","sourceRoot":"","sources":["../../src/gameengine/board-config.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,WAAW;IAC1B;;OAEG;IACH,wBAAwB,EAAE,MAAM,CAAC;IACjC;;OAEG;IACH,KAAK,EAAE,MAAM,CAAC;IACd;;OAEG;IACH,MAAM,EAAE,MAAM,CAAC;IACf;;OAEG;IACH,aAAa,EAAE,MAAM,CAAC;CACvB"}

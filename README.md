@@ -5,7 +5,7 @@
 | ---------------------- |:--------:|
 | Thea Josephine Halim   | 13522012 |
 | Melati Anggraini       | 13522035 |
-| Hayya Zuhailii Kinasih | 15322102 |
+| Hayya Zuhailii Kinasih | 13522102 |
 
 ## Table of Contents 💫
 * [Features](#greedy-algorithm-🎈)

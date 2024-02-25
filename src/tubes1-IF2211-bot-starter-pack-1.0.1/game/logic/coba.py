@@ -10,16 +10,16 @@ class Terdekat(BaseLogic):
         self.goal_position: Optional[Position] = None
 
     def next_move(self, board_bot: GameObject, board: Board):
-        start_time = time.time()
         props = board_bot.properties
         # Analyze new state
         current_position = board_bot.position
         base = board_bot.properties.base
-        time_left = board_bot.properties.milliseconds_left
-        distance_base = ((current_position.x - base.x)**2 + (current_position.y - base.y)**2)**(1/2)
-
+        time_left = board_bot.properties.milliseconds_left/1000
+        distance_base = (abs(current_position.x - base.x) + abs(current_position.y - base.y))
+        # print("----time left",time_left)
+        # print("--dist base", distance_base)
         # Move to base if bot's inventory is full or there is no timeleft
-        if props.diamonds == 5 or distance_base >= time_left:
+        if props.diamonds == 5 or (distance_base >= time_left-1 and distance_base>0):
             self.goal_position = base
         # There is still time to get diamonds
         else:
@@ -28,20 +28,20 @@ class Terdekat(BaseLogic):
             diamond_point = [j.properties.points for j in diamond_list]
             diamond_position = [i.position for i in diamond_list]
             #get closest diamond
-            distance_list = [((current_position.x - position.x)**2 + (current_position.y - position.y)**2)**(1/2) for position in diamond_position]
-            #ignore red diamonds
+            distance_list = [(abs(current_position.x - position.x) + abs(current_position.y - position.y)) for position in diamond_position]
+            #ignore red diamonds when inventory is at 4
+            # print("TUJUAN X", )
             if (props.diamonds == 4 and diamond_point[distance_list.index(min(distance_list))]== 2):
                 # tambahin yang ngecek jarak diamond biru terdekat dan base
-            
-                dist = (((current_position.x - diamond_list[0].position.x)**2 + (current_position.y - diamond_list[0].position.y)**2)**(1/2))
+                dist = ((abs(current_position.x - diamond_list[0].position.x) + abs(current_position.y - diamond_list[0].position.y)))
                 obj = diamond_list[0]
                 count = 0
                 for i in diamond_list :
                     if (i.properties.points == 1 ):
-                        dist_temp =  (((current_position.x - i.position.x)**2 + (current_position.y - i.position.y)**2)**(1/2))
-                    if(dist_temp<dist):
-                        dist = dist_temp
-                        obj = diamond_list[count]
+                        dist_temp =  ((abs(current_position.x - i.position.x) + abs(current_position.y - i.position.y)))
+                        if(dist_temp<dist):
+                            dist = dist_temp
+                            obj = diamond_list[count]
                     count+=1
                 if(dist<distance_base):
                     self.goal_position = obj.position
@@ -66,7 +66,8 @@ class Terdekat(BaseLogic):
                     self.goal_position.x,
                     self.goal_position.y,
                 )
-        end_time = time.time()
-        elapse_time = end_time-start_time
-        print("INI WAKTU SETIAP LANGKAH ", elapse_time)
+
         return delta_x, delta_y
+    
+# run shortcut 
+# python main.py --logic Coba --email=your_email@example.com --name=your_name --password=your_password --team etimo 

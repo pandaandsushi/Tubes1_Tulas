@@ -89,7 +89,7 @@ class Terdekat(BaseLogic):
         props = board_bot.properties
         # Analyze new state
         current_position = board_bot.position
-        my_bot_pocket = board_bot.properties.points
+        my_bot_pocket = board_bot.properties.diamonds
         print("bot kitaaa", current_position)
         base = board_bot.properties.base
         time_left = board_bot.properties.milliseconds_left/1000
@@ -112,14 +112,18 @@ class Terdekat(BaseLogic):
             # List all bots
             # bot_list = board.bots
             bot_position = [i.position for i in bot_objects]
-            bot_pockets = [j.properties.points for j in bot_objects]
+            bot_pockets = [j.properties.diamonds for j in bot_objects]
+
             # offense other bot if the distance to each other is 1
             distance_bot_list =  [(abs(current_position.x - position.x) + abs(current_position.y - position.y)) for position in bot_position]
+            print("test",distance_bot_list)
 
             i = 0
             for bot in bot_position :
-                if(current_position != bot and distance_bot_list[bot] == 1 and bot_pockets[i]>my_bot_pocket):
-                    self.goal_position = bot_position[bot]
+                print("jarak  bot ke ",i,distance_bot_list[i])
+                if(current_position != bot and distance_bot_list[i] == 1 and bot_pockets[i]>my_bot_pocket):
+                    print("JARAKNYA 1")
+                    self.goal_position = bot_position[i]
                     delta_x, delta_y = get_direction(
                     current_position.x,
                     current_position.y,

@@ -98,7 +98,7 @@ class Terdekat(BaseLogic):
         # Analyze new state
         current_position = board_bot.position
         my_bot_pocket = board_bot.properties.diamonds
-        print("bot kitaaa", current_position)
+        print("OUR BOT PSTION", current_position)
         base = board_bot.properties.base
         time_left = board_bot.properties.milliseconds_left/1000
         to_base = self.closest_to_position(board, board_bot, base)
@@ -144,19 +144,23 @@ class Terdekat(BaseLogic):
             for i in range (len(bot_objects)):
                 if(props.diamonds > bot_objects[i].properties.diamonds and bot_objects[i].properties.diamonds!=5 and i!=idx_our_bot and distance_bot_list[i]==3):
                     # time to avoid bots
-                    if (bot_objects[i].position.x==board_bot.position.x):
+                    if (bot_objects[i].position.x > board_bot.position.x) and (bot_objects[i].position.y > board_bot.position.y):
+                        up,right = False,False
+                    elif (bot_objects[i].position.x > board_bot.position.x) and (bot_objects[i].position.y < board_bot.position.y):
+                        down,right = False,False
+                    elif (bot_objects[i].position.x < board_bot.position.x) and (bot_objects[i].position.y < board_bot.position.y):
+                        left,down = False,False
+                    elif (bot_objects[i].position.x < board_bot.position.x) and (bot_objects[i].position.y > board_bot.position.y):
+                        left,up = False,False
+                    elif (bot_objects[i].position.x==board_bot.position.x):
                         if (bot_objects[i].position.y>board_bot.position.y):
-                            print("NGEHINDARIN BOT UP", bot_objects[i].properties.name)
                             up = False
                         else:
-                            print("NGEHINDARIN BOT DOWN", bot_objects[i].properties.name)
                             down = False
                     elif (bot_objects[i].position.y==board_bot.position.y):
                         if (bot_objects[i].position.x>board_bot.position.x):
-                            print("NGEHINDARIN BOT RIGHT", bot_objects[i].properties.name)
                             right = False
                         else:
-                            print("NGEHINDARIN BOT LEFT", bot_objects[i].properties.name)
                             left = False
 
                     avoid = True

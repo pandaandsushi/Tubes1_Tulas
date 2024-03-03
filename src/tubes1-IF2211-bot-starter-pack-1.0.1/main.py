@@ -10,12 +10,15 @@ from game.util import *
 from game.logic.base import BaseLogic
 from game.logic.mybot import MyBot
 from game.logic.coba import Terdekat
+from game.logic.random import RandomLogic
 
 init()
 BASE_URL = "http://localhost:3000/api"
 DEFAULT_BOARD_ID = 1
 CONTROLLERS = {
-    "Coba": Terdekat,"MyBot":MyBot
+    "Coba": Terdekat,
+    "MyBot":MyBot,
+    "Random" : RandomLogic
 }
 
 ###############################################################################

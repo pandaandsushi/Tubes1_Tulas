@@ -95,11 +95,6 @@ class Terdekat(BaseLogic):
         time_left = board_bot.properties.milliseconds_left/1000
         to_base = self.closest_to_position(board, board_bot, base)
         diamond_list = board.diamonds
-        # print("----time left",time_left)
-        # print("--dist base", distance_base)
-        #print("current_position ", current_position)
-        #print("tele1 loc ", teleport_objects[0].position)
-        #print("tele2 loc ", teleport_objects[1].position)
 
         # Move to base if bot's inventory is full or there is no timeleft
         if props.diamonds == 5 or (to_base["distance"] >= time_left-1.75 and to_base["distance"]>0):
@@ -108,18 +103,34 @@ class Terdekat(BaseLogic):
             self.travel_method = to_base["method"]
         # There is still time to get diamonds
         else:
-            #diamond_point = [j.properties.points for j in diamond_list]
-            #diamond_position = [i.position for i in diamond_list]
+            #get list of diamond and position
+            # diamond_point = [j.properties.points for j in diamond_list]
+            # diamond_position = [i.position for i in diamond_list]
             #get closest diamond
-            #distance_list = [(abs(current_position.x - position.x) + abs(current_position.y - position.y)) for position in diamond_position]
-            # List all bots
-            bot_list = board.bots
-            bot_position = [i.position for i in bot_list]
-            bot_pockets = [j.properties.diamonds for j in bot_list]
+            # distance_list = [(abs(current_position.x - position.x) + abs(current_position.y - position.y)) for position in diamond_position]
 
-            #min_dia_by_walking = min(distance_list)
-            #to_first_tele = (abs(teleport_objects[0].position.x - current_position.x) + abs(teleport_objects[0].position.y - current_position.y))
-            #to_sec_tele = (abs(teleport_objects[1].position.x - current_position.x) + abs(teleport_objects[1].position.y - current_position.y))
+            # List all bots
+            # bot_list = board.bots
+            bot_position = [i.position for i in bot_objects]
+            bot_pockets = [j.properties.points for j in bot_objects]
+            # offense other bot if the distance to each other is 1
+            distance_bot_list =  [(abs(current_position.x - position.x) + abs(current_position.y - position.y)) for position in bot_position]
+
+            i = 0
+            for bot in bot_position :
+                if(current_position != bot and distance_bot_list[bot] == 1 and bot_pockets[i]>my_bot_pocket):
+                    self.goal_position = bot_position[bot]
+                    delta_x, delta_y = get_direction(
+                    current_position.x,
+                    current_position.y,
+                    self.goal_position.x,
+                    self.goal_position.y,
+                    )
+                    return delta_x, delta_y   
+                i+=1
+            # min_dia_by_walking = min(distance_list)
+            # to_first_tele = (abs(teleport_objects[0].position.x - current_position.x) + abs(teleport_objects[0].position.y - current_position.y))
+            # to_sec_tele = (abs(teleport_objects[1].position.x - current_position.x) + abs(teleport_objects[1].position.y - current_position.y))
             to_red_button = self.closest_to_position(board, board_bot, red_button_objects[0].position)
             #print(to_red_button)
 

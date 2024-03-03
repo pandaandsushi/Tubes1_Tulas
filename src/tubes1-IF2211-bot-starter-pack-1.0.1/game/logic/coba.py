@@ -120,6 +120,7 @@ class Terdekat(BaseLogic):
             #get the closest diamond
             goal_diamond = self.closest_diamond(board, board_bot, diamond_list)
             #print(goal_diamond)
+            #print(goal_diamond)
             self.goal_position = goal_diamond["diamond"].position
             self.travel_method = goal_diamond["method"]
 
@@ -145,15 +146,18 @@ class Terdekat(BaseLogic):
                 #print("red diamond death scenario")
                 # find the closest blue dias available also considering base distance to dias
                 blue_diamond_list = list(filter(lambda diamond: diamond.properties.points == 1, diamond_list))
-                goal_diamond = self.closest_diamond(board, board_bot, blue_diamond_list)
-
-                #print(goal_diamond)
+                if (len(blue_diamond_list) > 0): 
+                    goal_diamond = self.closest_diamond(board, board_bot, blue_diamond_list)
+                    #print(goal_diamond)
                     
                 # decide to go back to base immediately or grab another blue dias
-                if(goal_diamond["distance"] < to_base["distance"]):
-                    self.goal_position = goal_diamond["diamond"].position
-                    self.travel_method = goal_diamond["method"]
-                else :
+                    if(goal_diamond["distance"] < to_base["distance"]):
+                        self.goal_position = goal_diamond["diamond"].position
+                        self.travel_method = goal_diamond["method"]
+                    else :
+                        self.goal_position = base
+                        self.travel_method = to_base["method"]
+                else:
                     self.goal_position = base
                     self.travel_method = to_base["method"]
                 #dist = ((abs(current_position.x - diamond_list[0].position.x) + abs(current_position.y - diamond_list[0].position.y))) + ((abs(base.x - diamond_list[0].position.x) + abs(base.y - diamond_list[0].position.y)))

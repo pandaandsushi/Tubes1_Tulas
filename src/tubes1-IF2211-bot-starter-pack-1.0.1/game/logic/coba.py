@@ -88,7 +88,6 @@ class Terdekat(BaseLogic):
         teleport_objects = self.get_teleport_objects(board)
         red_button_objects = self.get_red_button_objects(board)
         bot_objects = self.get_bot_objects(board)
-
         # testing redbutton and teleport
         #print(f"Redbutton position: {red_button_objects[0].position}")
 
@@ -104,26 +103,21 @@ class Terdekat(BaseLogic):
         time_left = board_bot.properties.milliseconds_left/1000
         to_base = self.closest_to_position(board, board_bot, base)
         diamond_list = board.diamonds
+
+        # base variables for tackle bot
         avoid = False
         left = True
         right = True
         up = True
         down = True
+        
         # Move to base if bot's inventory is full or there is no timeleft
-        if props.diamonds == 5 or (to_base["distance"] >= time_left-1.85 and to_base["distance"]>0):
+        if props.diamonds == 5 or (to_base["distance"] >= time_left-2 and to_base["distance"]>0):
             print("To base we go!")
             self.goal_position = base
             self.travel_method = to_base["method"]
         # There is still time to get diamonds
         else:
-            #get list of diamond and position
-            # diamond_point = [j.properties.points for j in diamond_list]
-            # diamond_position = [i.position for i in diamond_list]
-            #get closest diamond
-            # distance_list = [(abs(current_position.x - position.x) + abs(current_position.y - position.y)) for position in diamond_position]
-
-            # List all bots
-            # bot_list = board.bots
             bot_position = [i.position for i in bot_objects]
             bot_pockets = [j.properties.diamonds for j in bot_objects]
 
@@ -148,7 +142,7 @@ class Terdekat(BaseLogic):
                     return delta_x, delta_y   
                 i+=1
             for i in range (len(bot_objects)):
-                if(props.diamonds > bot_objects[i].properties.diamonds and i!=idx_our_bot and distance_bot_list[i]==2):
+                if(props.diamonds > bot_objects[i].properties.diamonds and bot_objects[i].properties.diamonds!=5 and i!=idx_our_bot and distance_bot_list[i]==3):
                     # time to avoid bots
                     if (bot_objects[i].position.x==board_bot.position.x):
                         if (bot_objects[i].position.y>board_bot.position.y):
@@ -170,13 +164,13 @@ class Terdekat(BaseLogic):
             # to_first_tele = (abs(teleport_objects[0].position.x - current_position.x) + abs(teleport_objects[0].position.y - current_position.y))
             # to_sec_tele = (abs(teleport_objects[1].position.x - current_position.x) + abs(teleport_objects[1].position.y - current_position.y))
             to_red_button = self.closest_to_position(board, board_bot, red_button_objects[0].position)
-            #print(to_red_button)
 
             #get the closest diamond
             goal_diamond = self.closest_diamond(board, board_bot, diamond_list)
             self.goal_position = goal_diamond["diamond"].position
             self.travel_method = goal_diamond["method"]
 
+            # get dias by normal walking (travel_method == 0)
             if (self.travel_method == 0):
                 delta_x,delta_y = get_direction(current_position.x, current_position.y, self.goal_position.x, self.goal_position.y,)
                 while (safe(delta_x,delta_y,up,down,left,right)==False):
@@ -202,10 +196,6 @@ class Terdekat(BaseLogic):
                 #ignore red diamonds when inventory is at 4, or else bot will go back and forth for the red dias
             #    min_dia_by_first_tele = min(goto_first_tele_to_dia_dist) 
             #    min_dia_by_sec_tele = min(goto_sec_tele_to_dia_dist)
-            #    print("----MINIMUM TO DIA")
-            #    print("By walking: ",min_dia_by_walking)
-            #    print("By first_tele: ",min_dia_by_first_tele)
-            #    print("By sec_tele: ",min_dia_by_sec_tele)
             if (props.diamonds == 4 and goal_diamond["diamond"].properties.points == 2):
                 #print("red diamond death scenario")
                 # find the closest blue dias available also considering base distance to dias
@@ -229,9 +219,6 @@ class Terdekat(BaseLogic):
                     self.travel_method = to_base["method"]
                     delta_x,delta_y = get_direction(current_position.x, current_position.y, self.goal_position.x, self.goal_position.y,)
                     avoid_tele_base(current_position,up,down,left,right,board,delta_x,delta_y)
-                #dist = ((abs(current_position.x - diamond_list[0].position.x) + abs(current_position.y - diamond_list[0].position.y))) + ((abs(base.x - diamond_list[0].position.x) + abs(base.y - diamond_list[0].position.y)))
-                #obj = diamond_list[0]
-                #count = 0
                 #for i in diamond_list :
                 #    if (i.properties.points == 1 ):
                 #        goto_first_tele_to_blue_dia_dist = ((abs(teleport_objects[1].position.x - i.position.x) + abs(teleport_objects[1].position.y - i.position.y))) + ((abs(teleport_objects[0].position.x - current_position.x) + abs(teleport_objects[0].position.y - current_position.y)))
@@ -279,7 +266,7 @@ class Terdekat(BaseLogic):
             #print("goal position", self.goal_position)
 
             if (self.goal_position == current_position) or diamond_list == None:
-                # buat avoid error delta=0
+                # to avoid error delta = 0 in case of bot gets teleported and goal position is set on the teleporter, whereas the bot is on the teleporter
                 random_direction = random.choice([(1, 0), (0, 1), (-1, 0), (0, -1)])
                 delta_x = random_direction[0]
                 delta_y = random_direction[1]

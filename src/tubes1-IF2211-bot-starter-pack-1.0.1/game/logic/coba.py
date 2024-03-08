@@ -1,4 +1,3 @@
-from typing import Optional
 from game.logic.base import BaseLogic
 from game.models import GameObject, Board, Position
 from ..util import get_direction
@@ -10,6 +9,7 @@ def safe(delta_x,delta_y,up,down,left,right):
     if ((delta_x == 1) and right) or ((delta_x == -1) and left) or ((delta_y == 1) and up) or ((delta_y == -1) and down):
         return True
     return False
+
 def avoid_tele_base(current_position:Position,up,down,left,right,board:Board,delta_x,delta_y):
     if (safe(delta_x,delta_y,up,down,left,right)==False):
         if (delta_x == 1 and delta_y==0) or (delta_x == -1 and delta_y==0): #bot ada di sumbu x
@@ -22,6 +22,8 @@ def avoid_tele_base(current_position:Position,up,down,left,right,board:Board,del
                 return -1,0 #left
             else:
                 return 1,0  #right
+    else:
+        return 0,0
 
 class Terdekat(BaseLogic):
     def __init__(self):
@@ -39,6 +41,7 @@ class Terdekat(BaseLogic):
      # offense to attack
     def get_bot_objects(self,board : Board)-> List[GameObject]:
         return [d for d in board.game_objects if d.type == "BotGameObject"]
+    
     #return closest diamond, method to get to diamond (0: direct, 1: teleport 1, 2: teleport 2), and the distance
     def closest_diamond(self, board: Board, board_bot: GameObject, diamonds: List[GameObject]):
         current_position = board_bot.position
@@ -85,24 +88,20 @@ class Terdekat(BaseLogic):
         return {"method": method, "distance": dist}
 
     def next_move(self, board_bot: GameObject, board: Board):
+        # Analyze state of board
         teleport_objects = self.get_teleport_objects(board)
         red_button_objects = self.get_red_button_objects(board)
         bot_objects = self.get_bot_objects(board)
-        # testing redbutton and teleport
-        #print(f"Redbutton position: {red_button_objects[0].position}")
+        diamond_list = board.diamonds
+        base = board_bot.properties.base
+        to_base = self.closest_to_position(board, board_bot, base)
+        time_left = board_bot.properties.milliseconds_left/1000
+        to_red_button = self.closest_to_position(board, board_bot, red_button_objects[0].position)
 
-        # for teleport_object in teleport_objects:
-        #     print(f"TeleportGameObject position: {teleport_object.position}")
-        
+        # Analyze state of bot
         props = board_bot.properties
-        # Analyze new state
         current_position = board_bot.position
         my_bot_pocket = board_bot.properties.diamonds
-        print("OUR BOT PSTION", current_position)
-        base = board_bot.properties.base
-        time_left = board_bot.properties.milliseconds_left/1000
-        to_base = self.closest_to_position(board, board_bot, base)
-        diamond_list = board.diamonds
 
         # base variables for tackle bot
         avoid = False
@@ -113,7 +112,6 @@ class Terdekat(BaseLogic):
         
         # Move to base if bot's inventory is full or there is no timeleft
         if props.diamonds == 5 or (to_base["distance"] >= time_left-2 and to_base["distance"]>0):
-            print("To base we go!")
             self.goal_position = base
             self.travel_method = to_base["method"]
         # There is still time to get diamonds
@@ -123,24 +121,22 @@ class Terdekat(BaseLogic):
 
             # offense other bot if the distance to each other is 1
             distance_bot_list =  [(abs(current_position.x - position.x) + abs(current_position.y - position.y)) for position in bot_position]
-            print("Current bot", current_position, "\n")
             for i in range (len(bot_objects)):
                 if (current_position.x == bot_objects[i].position.x and current_position.y == bot_objects[i].position.y):
                     idx_our_bot = i  
             i = 0
             for bot in bot_position :
-                print("jarak bot ke-",i,distance_bot_list[i])
                 if(current_position != bot and distance_bot_list[i] == 1 and bot_pockets[i]>my_bot_pocket):
-                    print("JARAKNYA 1")
                     self.goal_position = bot_position[i]
                     delta_x, delta_y = get_direction(
-                    current_position.x,
-                    current_position.y,
-                    self.goal_position.x,
-                    self.goal_position.y,
+                        current_position.x,
+                        current_position.y,
+                        self.goal_position.x,
+                        self.goal_position.y,
                     )
                     return delta_x, delta_y   
                 i+=1
+            
             for i in range (len(bot_objects)):
                 if(props.diamonds > bot_objects[i].properties.diamonds and bot_objects[i].properties.diamonds!=5 and i!=idx_our_bot and distance_bot_list[i]==3):
                     # time to avoid bots
@@ -164,44 +160,13 @@ class Terdekat(BaseLogic):
                             left = False
 
                     avoid = True
-            # min_dia_by_walking = min(distance_list)
-            # to_first_tele = (abs(teleport_objects[0].position.x - current_position.x) + abs(teleport_objects[0].position.y - current_position.y))
-            # to_sec_tele = (abs(teleport_objects[1].position.x - current_position.x) + abs(teleport_objects[1].position.y - current_position.y))
-            to_red_button = self.closest_to_position(board, board_bot, red_button_objects[0].position)
 
             #get the closest diamond
             goal_diamond = self.closest_diamond(board, board_bot, diamond_list)
             self.goal_position = goal_diamond["diamond"].position
             self.travel_method = goal_diamond["method"]
 
-            # get dias by normal walking (travel_method == 0)
-            if (self.travel_method == 0):
-                delta_x,delta_y = get_direction(current_position.x, current_position.y, self.goal_position.x, self.goal_position.y,)
-                while (safe(delta_x,delta_y,up,down,left,right)==False):
-                    diamond_list = diamond_list.remove(goal_diamond["diamond"])
-                    goal_diamond = self.closest_diamond(board, board_bot, diamond_list)
-                    delta_x,delta_y = get_direction(current_position.x, current_position.y, self.goal_position.x, self.goal_position.y,)
-                self.goal_position = goal_diamond["diamond"].position
-                self.travel_method = goal_diamond["method"]
-            if avoid:
-                return delta_x,delta_y
-
-            # here is the opt to use tele to reach dia 
-            #if (min_dia_by_walking<to_first_tele and min_dia_by_walking<to_sec_tele):
-            #    min_dia_by_first_tele = 999999
-            #    min_dia_by_sec_tele = 999999
-            # opt to use red button
-            #elif(to_red_button<min_dia_by_walking and min_dia_by_walking>7):
-            #    self.goal_position = red_button_objects[0].position
-            #else:
-            #    goto_first_tele_to_dia_dist = [((abs(teleport_objects[1].position.x - position.x) + abs(teleport_objects[1].position.y - position.y))) + ((abs(teleport_objects[0].position.x - current_position.x) + abs(teleport_objects[0].position.y - current_position.y))) for position in diamond_position]
-            #    goto_sec_tele_to_dia_dist = [((abs(teleport_objects[0].position.x - position.x) + abs(teleport_objects[0].position.y - position.y))) + ((abs(teleport_objects[1].position.x - current_position.x) + abs(teleport_objects[1].position.y - current_position.y)))for position in diamond_position]
-                # self.goal_position = diamond_position[distance_list.index(min(distance_list))]
-                #ignore red diamonds when inventory is at 4, or else bot will go back and forth for the red dias
-            #    min_dia_by_first_tele = min(goto_first_tele_to_dia_dist) 
-            #    min_dia_by_sec_tele = min(goto_sec_tele_to_dia_dist)
             if (props.diamonds == 4 and goal_diamond["diamond"].properties.points == 2):
-                #print("red diamond death scenario")
                 # find the closest blue dias available also considering base distance to dias
                 blue_diamond_list = list(filter(lambda diamond: diamond.properties.points == 1, diamond_list))
                 if (len(blue_diamond_list) > 0): 
@@ -211,92 +176,43 @@ class Terdekat(BaseLogic):
                     if(goal_diamond["distance"] < to_base["distance"]):
                         self.goal_position = goal_diamond["diamond"].position
                         self.travel_method = goal_diamond["method"]
-                        delta_x,delta_y = get_direction(current_position.x, current_position.y, self.goal_position.x, self.goal_position.y,)
-                        avoid_tele_base(current_position,up,down,left,right,board,delta_x,delta_y)
                     else :
                         self.goal_position = base
                         self.travel_method = to_base["method"]
-                        delta_x,delta_y = get_direction(current_position.x, current_position.y, self.goal_position.x, self.goal_position.y,)
-                        avoid_tele_base(current_position,up,down,left,right,board,delta_x,delta_y)
                 else:   # go to base, wont try to find blue dias
                     self.goal_position = base
                     self.travel_method = to_base["method"]
-                    delta_x,delta_y = get_direction(current_position.x, current_position.y, self.goal_position.x, self.goal_position.y,)
-                    avoid_tele_base(current_position,up,down,left,right,board,delta_x,delta_y)
-                #for i in diamond_list :
-                #    if (i.properties.points == 1 ):
-                #        goto_first_tele_to_blue_dia_dist = ((abs(teleport_objects[1].position.x - i.position.x) + abs(teleport_objects[1].position.y - i.position.y))) + ((abs(teleport_objects[0].position.x - current_position.x) + abs(teleport_objects[0].position.y - current_position.y)))
-                #        goto_sec_tele_to_blue_dia_dist = ((abs(teleport_objects[0].position.x - i.position.x) + abs(teleport_objects[0].position.y - i.position.y))) + ((abs(teleport_objects[1].position.x - current_position.x) + abs(teleport_objects[1].position.y - current_position.y)))
-                #        dist_temp =  ((abs(current_position.x - i.position.x) + abs(current_position.y - i.position.y))) + ((abs(base.x - i.position.x) + abs(base.y - i.position.y)))
-                #        if(dist_temp<dist and dist_temp<goto_first_tele_to_blue_dia_dist and dist_temp<goto_sec_tele_to_blue_dia_dist):
-                #            dist = dist_temp
-                #            obj = diamond_list[count]
-                #        elif (goto_first_tele_to_blue_dia_dist<dist_temp and goto_first_tele_to_blue_dia_dist<goto_sec_tele_to_blue_dia_dist and goto_first_tele_to_blue_dia_dist<dist):
-                #            dist = goto_first_tele_to_blue_dia_dist
-                #            obj = teleport_objects[0]
-                #        else:
-                #            dist = goto_sec_tele_to_blue_dia_dist
-                #            obj = teleport_objects[1]
-                #    count+=1
-            
+                
+            # go to red button if diamond is scarce
             if (to_red_button["distance"]<goal_diamond["distance"] and goal_diamond["distance"]>7):
                 self.goal_position = red_button_objects[0].position
                 self.travel_method = to_red_button["method"]
                     
-            #elif (abs(min_dia_by_walking-min_dia_by_first_tele)==1 or abs(min_dia_by_walking-min_dia_by_sec_tele)==1 or abs(min_dia_by_first_tele-min_dia_by_sec_tele)==1) :
-            #    self.goal_position = diamond_position[distance_list.index(min(distance_list))]
-            #else:
-                # go to the closest dia by normal walking or using tele
-            #    if (min_dia_by_walking<min_dia_by_sec_tele and min_dia_by_walking<min_dia_by_first_tele):
-            #        self.goal_position = diamond_position[distance_list.index(min(distance_list))]
-            #    elif (min_dia_by_first_tele<min_dia_by_walking) and (min_dia_by_first_tele<min_dia_by_sec_tele):
-            #        self.goal_position = teleport_objects[0].position
-            #        print("USE TELE 1 TO GRAB DIA")
-            #    else:
-            #        self.goal_position = teleport_objects[1].position
-            #        print("USE TELE 2 TO GRAB DIA")
+            
         if self.goal_position:
-            # We are aiming for a specific position, calculate delta
-
+            #change goal to teleporter
             if (self.travel_method == 1):
                 self.goal_position = teleport_objects[0].position
-                delta_x,delta_y = get_direction(current_position.x, current_position.y, self.goal_position.x, self.goal_position.y,)
-                avoid_tele_base(current_position,up,down,left,right,board,delta_x,delta_y)
             elif (self.travel_method == 2):
                 self.goal_position = teleport_objects[1].position
-                delta_x,delta_y = get_direction(current_position.x, current_position.y, self.goal_position.x, self.goal_position.y,)
-                avoid_tele_base(current_position,up,down,left,right,board,delta_x,delta_y)
 
-            #print("goal position", self.goal_position)
-
-            if (self.goal_position == current_position) or diamond_list == None:
-                # to avoid error delta = 0 in case of bot gets teleported and goal position is set on the teleporter, whereas the bot is on the teleporter
-                random_direction = random.choice([(1, 0), (0, 1), (-1, 0), (0, -1)])
-                delta_x = random_direction[0]
-                delta_y = random_direction[1]
-            else:
-                #if (self.goal_position == base and current_position!=teleport_objects[0].position and current_position!=teleport_objects[1].position):  # ini baru aplikasi tele ke base, belum untuk goal apapun
-                #    goto_first_tele_to_base_dist = ((abs(teleport_objects[1].position.x - base.x) + abs(teleport_objects[1].position.y - base.y))) + ((abs(teleport_objects[0].position.x - current_position.x) + abs(teleport_objects[0].position.y - current_position.y)))
-                #    goto_sec_tele_to_base_dist = ((abs(teleport_objects[0].position.x - base.x) + abs(teleport_objects[0].position.y - base.y))) + ((abs(teleport_objects[1].position.x - current_position.x) + abs(teleport_objects[1].position.y - current_position.y)))
-                #    if distance_base < goto_first_tele_to_base_dist and distance_base < goto_sec_tele_to_base_dist:
-                #        self.goal_position = base
-                #    elif (goto_first_tele_to_base_dist < distance_base and goto_first_tele_to_base_dist < goto_sec_tele_to_base_dist):
-                #        self.goal_position = teleport_objects[0].position
-                #    else:
-                #        self.goal_position = teleport_objects[1].position
-                # tackle bot instead of collecting dias
-                        
-                delta_x, delta_y = get_direction(
+            delta_x, delta_y = get_direction(
                     current_position.x,
                     current_position.y,
                     self.goal_position.x,
                     self.goal_position.y,
                 )
+            
+            if avoid:
+                delta_x, delta_y = avoid_tele_base(current_position,up,down,left,right,board,delta_x,delta_y)
+
+            while not board.is_valid_move(current_position, delta_x, delta_y):
+                # to avoid error delta = 0 in case of bot gets teleported and goal position is set on the teleporter, whereas the bot is on the teleporter
+                random_direction = random.choice([(1, 0), (0, 1), (-1, 0), (0, -1)])
+                delta_x = random_direction[0]
+                delta_y = random_direction[1]
 
         return delta_x, delta_y
-# ini muncul issue kalau di detik2 terakhir, mau balik ke base, tapi di jalan ketemu teleporter, jadi ke teleport, 
-# trus dia bakal invalid move delta x cannot = delta y lagi, game nya ga mau selesai
-
 
 # run shortcut 
 # python main.py --logic Coba --email=your_email@example.com --name=your_name --password=your_password --team etimo

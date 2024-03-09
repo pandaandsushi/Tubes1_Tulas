@@ -1,1 +1,0 @@
-{"version":3,"file":"board-feature.dto.d.ts","sourceRoot":"","sources":["../../src/models/board-feature.dto.ts"],"names":[],"mappings":"AAAA,OAAO,EACL,iBAAiB,EACjB,qBAAqB,EACrB,sBAAsB,EACtB,gCAAgC,EACjC,MAAM,wBAAwB,CAAC;AAGhC,MAAM,CAAC,OAAO,OAAO,eAAe;IAElC,IAAI,EAAG,MAAM,CAAC;IAId,MAAM,EACF,qBAAqB,GACrB,iBAAiB,GACjB,sBAAsB,GACtB,gCAAgC,GAChC,EAAE,GACF,IAAI,CAAC;CACV"}

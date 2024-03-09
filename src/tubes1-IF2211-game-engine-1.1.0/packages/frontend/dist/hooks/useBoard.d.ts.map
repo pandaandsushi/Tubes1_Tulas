@@ -1,1 +1,0 @@
-{"version":3,"file":"useBoard.d.ts","sourceRoot":"","sources":["../../src/hooks/useBoard.ts"],"names":[],"mappings":"AAAA,OAAO,EACL,uBAAuB,EAEvB,cAAc,EACf,MAAM,wBAAwB,CAAC;AAIhC,eAAO,MAAM,QAAQ,YAAa,MAAM,SAAS,MAAM;;;CAyDtD,CAAC;AAEF,MAAM,WAAW,SAAS;IACxB,KAAK,EAAE,MAAM,CAAC;IACd,MAAM,EAAE,MAAM,CAAC;IACf,IAAI,EAAE,cAAc,EAAE,EAAE,EAAE,CAAC;CAC5B"}

@@ -1,1 +1,0 @@
-{"version":3,"file":"BoardPicker.d.ts","sourceRoot":"","sources":["../../src/components/BoardPicker.tsx"],"names":[],"mappings":"AAAA,OAAO,EAAE,EAAE,EAAQ,MAAM,OAAO,CAAC;AAIjC,KAAK,gBAAgB,GAAG;IACtB,OAAO,EAAE,MAAM,CAAC;IAChB,QAAQ,EAAE,CAAC,KAAK,EAAE,KAAK,CAAC,WAAW,CAAC,iBAAiB,CAAC,KAAK,IAAI,CAAC;CACjE,CAAC;AAEF,eAAO,MAAM,WAAW,EAAE,EAAE,CAAC,gBAAgB,CAc3C,CAAC"}

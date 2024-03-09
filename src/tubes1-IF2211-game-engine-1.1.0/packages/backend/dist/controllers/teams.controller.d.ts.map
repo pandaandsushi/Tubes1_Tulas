@@ -1,1 +1,0 @@
-{"version":3,"file":"teams.controller.d.ts","sourceRoot":"","sources":["../../src/controllers/teams.controller.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,OAAO,EAAE,MAAM,WAAW,CAAC;AACpC,OAAO,EAAE,YAAY,EAAE,MAAM,aAAa,CAAC;AAE3C,qBAEa,eAAe;IACd,OAAO,CAAC,YAAY;gBAAZ,YAAY,EAAE,YAAY;IASxC,OAAO,IAAI,OAAO,CAAC,OAAO,EAAE,CAAC;CAIpC"}
